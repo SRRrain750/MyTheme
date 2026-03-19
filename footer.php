@@ -37,7 +37,7 @@
             </div>
         </div>
         <div style="padding-top: 2rem; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.85rem;">
-            <p>&copy; <?php echo date('Y'); ?> Synopsys, Inc. All Rights Reserved.</p>
+            <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>, Inc. All Rights Reserved.</p>
             <div style="background: var(--surface); padding: 0.5rem 1rem; border-radius: 4px; border: 1px solid var(--glass-border);">
                 🌐 English ▼
             </div>

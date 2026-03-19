@@ -9,13 +9,19 @@
 
 <header class="main-header">
     <div class="container header-content">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="logo">
-            <strong>SYNOPSYS</strong><span style="font-weight: 300;">®</span>
-        </a>
+        <div class="logo">
+            <?php 
+            if ( has_custom_logo() ) {
+                the_custom_logo();
+            } else {
+                echo '<a href="' . esc_url( home_url( '/' ) ) . '" rel="home"><strong>' . (get_bloginfo('name') ? esc_html(get_bloginfo('name')) : 'SYNOPSYS') . '</strong><span style="font-weight: 300;">®</span></a>';
+            }
+            ?>
+        </div>
         <nav>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="#">Why Synopsys <span style="font-size: 0.6rem;">▼</span></a>
+                    <a href="#">Why <?php echo esc_html(get_bloginfo('name') ? get_bloginfo('name') : 'Synopsys'); ?> <span style="font-size: 0.6rem;">▼</span></a>
                     <div class="mega-menu">
                         <div>
                             <h4>Our Company</h4>
@@ -28,7 +34,7 @@
                             </ul>
                         </div>
                         <div class="featured-content">
-                            <h4>Why Synopsys?</h4>
+                            <h4>Why <?php echo esc_html(get_bloginfo('name') ? get_bloginfo('name') : 'Synopsys'); ?>?</h4>
                             <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Our Technology, Your Innovation™. Trusted industry leader.</p>
                             <a href="#" style="color: var(--secondary); font-weight: 600;">Learn more &rarr;</a>
                         </div>

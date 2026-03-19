@@ -108,10 +108,22 @@ a {
     align-items: center;
 }
 
-.logo {
-    font-size: 1.75rem;
-    font-weight: 700;
+.logo, .custom-logo-link {
+    font-size: 1.8rem;
+    color: var(--secondary);
+    text-decoration: none;
     letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+}
+
+.logo img, .custom-logo {
+    max-height: 40px;
+    width: auto;
+}
+
+.logo {
+    font-weight: 700;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     background-clip: text;

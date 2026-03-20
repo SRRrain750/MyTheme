@@ -22,12 +22,12 @@
                 $btn2_link = get_post_meta(get_the_ID(), 'hero_btn2_link', true);
                 $bg_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
                 ?>
-                <section id="hero-<?php echo $slide_count; ?>" class="hero hero-slide <?php echo ($slide_count === 0) ? 'active' : ''; ?>" style="background-image: linear-gradient(rgba(9, 9, 11, 0.7), rgba(9, 9, 11, 0.7)), url('<?php echo esc_url($bg_image); ?>');">
+                <section id="hero-<?php echo $slide_count; ?>" class="hero hero-slide <?php echo ($slide_count === 0) ? 'active' : ''; ?>" style="background-image: linear-gradient(rgba(9, 9, 11, 0.3), rgba(9, 9, 11, 0.3)), url('<?php echo esc_url($bg_image); ?>');">
                     <div class="container hero-content">
                         <?php if ($subtitle) : ?>
                             <p class="hero-subtitle"><?php echo esc_html($subtitle); ?></p>
                         <?php endif; ?>
-                        <h1><?php the_title(); ?></h1>
+                        <h1 class="hero-title"><?php the_title(); ?></h1>
                         <p><?php echo get_the_content(); ?></p>
                         <div class="hero-btns">
                             <a href="<?php echo esc_url($btn_link ? $btn_link : '#'); ?>" class="btn btn-primary"><?php echo esc_html($btn_text ? $btn_text : 'Press Release'); ?> &nbsp; &rarr;</a>
@@ -45,7 +45,7 @@
             <section id="hero" class="hero active">
                 <div class="container hero-content">
                     <p class="hero-subtitle"><?php echo esc_html(get_theme_mod('hero_subtitle', 'Innovation for the AI Era')); ?></p>
-                    <h1><?php echo wp_kses_post(get_theme_mod('hero_title', 'Introducing Hardware-Assisted <span style="color: var(--primary);">Verification</span>')); ?></h1>
+                    <h1 class="hero-title"><?php echo wp_kses_post(get_theme_mod('hero_title', 'Introducing Hardware-Assisted <span style="color: var(--primary);">Verification</span>')); ?></h1>
                     <p><?php echo esc_html(get_theme_mod('hero_description', 'Powering the era of pervasive intelligence from silicon to systems with industry-leading EDA tools.')); ?></p>
                     <div class="hero-btns">
                         <a href="#" class="btn btn-primary">Press Release &nbsp; &rarr;</a>

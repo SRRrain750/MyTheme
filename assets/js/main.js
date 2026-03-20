@@ -59,6 +59,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Hero Slider Logic
+    const slides = document.querySelectorAll('.hero-slide');
+    const navItems = document.querySelectorAll('.nav-slide-item');
+    let currentSlide = 0;
+    let slideInterval;
+    const intervalTime = 6000; // 6 seconds
+
+    function showSlide(index) {
+        // Remove active class from all slides and nav items
+        slides.forEach(slide => slide.classList.remove('active'));
+        navItems.forEach(item => item.classList.remove('active'));
+
+        // Add active class to target slide and nav item
+        slides[index].classList.add('active');
+        navItems[index].classList.add('active');
+        currentSlide = index;
+        
+        // Reset and restart interval
+        clearInterval(slideInterval);
+        startSlideTimer();
+    }
+
+    function startSlideTimer() {
+        slideInterval = setInterval(() => {
+            let nextSlide = (currentSlide + 1) % slides.length;
+            showSlide(nextSlide);
+        }, intervalTime);
+    }
+
+    if (slides.length > 0) {
+        // Initial start
+        startSlideTimer();
+
+        // Nav item clicks
+        navItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+    }
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

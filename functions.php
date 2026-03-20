@@ -68,4 +68,88 @@ function mytheme_default_menu() {
     </ul>
     <?php
 }
+
+/**
+ * Add Hero Section Settings to Customizer
+ */
+function mytheme_customize_register($wp_customize) {
+    // Add Hero Section
+    $wp_customize->add_section('hero_section', array(
+        'title'    => __('Hero Section Settings', 'mytheme'),
+        'priority' => 30,
+    ));
+
+    // Hero Subtitle
+    $wp_customize->add_setting('hero_subtitle', array(
+        'default'           => 'Innovation for the AI Era',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('hero_subtitle', array(
+        'label'    => __('Hero Subtitle', 'mytheme'),
+        'section'  => 'hero_section',
+        'type'     => 'text',
+    ));
+
+    // Hero Title
+    $wp_customize->add_setting('hero_title', array(
+        'default'           => 'Introducing Hardware-Assisted Verification',
+        'sanitize_callback' => 'wp_kses_post',
+    ));
+    $wp_customize->add_control('hero_title', array(
+        'label'    => __('Hero Title', 'mytheme'),
+        'section'  => 'hero_section',
+        'type'     => 'textarea',
+    ));
+
+    // Hero Description
+    $wp_customize->add_setting('hero_description', array(
+        'default'           => 'Powering the era of pervasive intelligence from silicon to systems with industry-leading EDA tools.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('hero_description', array(
+        'label'    => __('Hero Description', 'mytheme'),
+        'section'  => 'hero_section',
+        'type'     => 'textarea',
+    ));
+}
+add_action('customize_register', 'mytheme_customize_register');
+
+/**
+ * Register Hero Slides Custom Post Type
+ */
+function mytheme_register_hero_cpt() {
+    $labels = array(
+        'name'               => _x('Hero Slides', 'post type general name', 'mytheme'),
+        'singular_name'      => _x('Hero Slide', 'post type singular name', 'mytheme'),
+        'menu_name'          => _x('Hero Slides', 'admin menu', 'mytheme'),
+        'name_admin_bar'     => _x('Hero Slide', 'add new on admin bar', 'mytheme'),
+        'add_new'            => _x('Add New', 'slide', 'mytheme'),
+        'add_new_item'       => __('Add New Hero Slide', 'mytheme'),
+        'new_item'           => __('New Hero Slide', 'mytheme'),
+        'edit_item'          => __('Edit Hero Slide', 'mytheme'),
+        'view_item'          => __('View Hero Slide', 'mytheme'),
+        'all_items'          => __('All Hero Slides', 'mytheme'),
+        'search_items'       => __('Search Hero Slides', 'mytheme'),
+        'not_found'          => __('No slides found.', 'mytheme'),
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'query_var'          => true,
+        'rewrite'            => array('slug' => 'hero-slide'),
+        'capability_type'    => 'post',
+        'has_archive'        => false,
+        'hierarchical'       => false,
+        'menu_position'      => 5,
+        'menu_icon'          => 'dashicons-images-alt2',
+        'supports'           => array('title', 'editor', 'thumbnail', 'custom-fields'),
+    );
+
+    register_post_type('hero_slide', $args);
+}
+add_action('init', 'mytheme_register_hero_cpt');
 ?>

@@ -1,41 +1,91 @@
 <?php get_header(); ?> 
 
 <main>
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
-        <div class="container hero-content reveal">
-            <p style="color: var(--secondary); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;">Innovation for the AI Era</p>
-            <h1>Introducing Hardware-Assisted <span style="color: var(--primary);">Verification</span></h1>
-            <p>Powering the era of pervasive intelligence from silicon to systems with industry-leading EDA tools.</p>
-            <div class="hero-btns">
-                <a href="#" class="btn btn-primary">Press Release &nbsp; &rarr;</a>
-                <a href="#" class="btn btn-secondary">Learn More &nbsp; &rarr;</a>
-            </div>
-        </div>
-    </section>
+    <!-- Hero Slider Section -->
+    <div class="hero-slider-wrapper">
+        <?php
+        $args = array(
+            'post_type'      => 'hero_slide',
+            'posts_per_page' => 5,
+            'orderby'        => 'menu_order',
+            'order'          => 'ASC',
+        );
+        $hero_query = new WP_Query($args);
+        $slide_count = 0;
 
-    <!-- Trending Slider Section -->
-    <section class="slider-section reveal">
-        <div class="container">
-            <div class="slider-container">
-                <div class="slide-item">
-                    <h3>Synopsys Converge: Re-engineering the...</h3>
+        if ($hero_query->have_posts()) :
+            while ($hero_query->have_posts()) : $hero_query->the_post();
+                $subtitle = get_post_meta(get_the_ID(), 'hero_subtitle', true);
+                $btn_text = get_post_meta(get_the_ID(), 'hero_btn_text', true);
+                $btn_link = get_post_meta(get_the_ID(), 'hero_btn_link', true);
+                $btn2_text = get_post_meta(get_the_ID(), 'hero_btn2_text', true);
+                $btn2_link = get_post_meta(get_the_ID(), 'hero_btn2_link', true);
+                $bg_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
+                ?>
+                <section id="hero-<?php echo $slide_count; ?>" class="hero hero-slide <?php echo ($slide_count === 0) ? 'active' : ''; ?>" style="background-image: linear-gradient(rgba(9, 9, 11, 0.3), rgba(9, 9, 11, 0.3)), url('<?php echo esc_url($bg_image); ?>');">
+                    <div class="container hero-content">
+                        <?php if ($subtitle) : ?>
+                            <p class="hero-subtitle"><?php echo esc_html($subtitle); ?></p>
+                        <?php endif; ?>
+                        <h1 class="hero-title"><?php the_title(); ?></h1>
+                        <p><?php echo get_the_content(); ?></p>
+                        <div class="hero-btns">
+                            <a href="<?php echo esc_url($btn_link ? $btn_link : '#'); ?>" class="btn btn-primary"><?php echo esc_html($btn_text ? $btn_text : 'Press Release'); ?> &nbsp; &rarr;</a>
+                            <a href="<?php echo esc_url($btn2_link ? $btn2_link : '#'); ?>" class="btn btn-secondary"><?php echo esc_html($btn2_text ? $btn2_text : 'Learn More'); ?> &nbsp; &rarr;</a>
+                        </div>
+                    </div>
+                </section>
+                <?php
+                $slide_count++;
+            endwhile;
+            wp_reset_postdata();
+        else :
+            // Fallback to Customizer Settings
+            ?>
+            <section id="hero" class="hero active">
+                <div class="container hero-content">
+                    <p class="hero-subtitle"><?php echo esc_html(get_theme_mod('hero_subtitle', 'Innovation for the AI Era')); ?></p>
+                    <h1 class="hero-title"><?php echo wp_kses_post(get_theme_mod('hero_title', 'Introducing Hardware-Assisted <span style="color: var(--primary);">Verification</span>')); ?></h1>
+                    <p><?php echo esc_html(get_theme_mod('hero_description', 'Powering the era of pervasive intelligence from silicon to systems with industry-leading EDA tools.')); ?></p>
+                    <div class="hero-btns">
+                        <a href="#" class="btn btn-primary">Press Release &nbsp; &rarr;</a>
+                        <a href="#" class="btn btn-secondary">Learn More &nbsp; &rarr;</a>
+                    </div>
                 </div>
-                <div class="slide-item" style="border-top-color: var(--primary);">
-                    <h3 style="color: var(--text);">Introducing HAV for the AI Era</h3>
-                </div>
-                <div class="slide-item">
-                    <h3>Synopsys Electronics Digital Twin Platform</h3>
-                </div>
-                <div class="slide-item">
-                    <h3>NVIDIA and Synopsys Announce Strategic...</h3>
-                </div>
-                <div class="slide-item">
-                    <h3>Synopsys and Ansys are Now United</h3>
+            </section>
+        <?php endif; ?>
+
+        <!-- Slider Navigation (Bottom Tabs) -->
+        <section class="slider-nav-section">
+            <div class="container">
+                <div class="slider-nav-container">
+                    <?php
+                    $nav_count = 0;
+                    if ($hero_query->have_posts()) :
+                        while ($hero_query->have_posts()) : $hero_query->the_post();
+                            ?>
+                            <div class="nav-slide-item <?php echo ($nav_count === 0) ? 'active' : ''; ?>" data-slide="<?php echo $nav_count; ?>">
+                                <h3><?php the_title(); ?></h3>
+                                <div class="progress-bar"></div>
+                            </div>
+                            <?php
+                            $nav_count++;
+                        endwhile;
+                        wp_reset_postdata();
+                    else:
+                        // Static Fallback Tabs
+                        $fallbacks = ['Synopsys Converge', 'Introducing HAV', 'Electronics Digital Twin', 'NVIDIA and Synopsys', 'Synopsys and Ansys'];
+                        foreach($fallbacks as $i => $title) : ?>
+                            <div class="nav-slide-item <?php echo ($i === 0) ? 'active' : ''; ?>" data-slide="<?php echo $i; ?>">
+                                <h3><?php echo esc_html($title); ?></h3>
+                                <div class="progress-bar"></div>
+                            </div>
+                        <?php endforeach;
+                    endif; ?>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- Pervasive Intelligence Section -->
     <section style="padding: 8rem 0; text-align: center;" class="reveal">

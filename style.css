@@ -96,6 +96,11 @@ a {
     color: #000000 !important;
 }
 
+.main-header.scrolled .contact-btn {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
 .main-header.scrolled .nav-item:hover>a,
 .main-header.scrolled .menu-item:hover>a {
     color: #555555 !important;

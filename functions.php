@@ -62,7 +62,39 @@ function mytheme_default_menu() {
                 </div>
             </div>
         </li>
-        <li class="nav-item"><a href="#">Solutions</a></li>
+        <li class="nav-item mega">
+            <a href="#">Solutions <span style="font-size: 0.6rem;">▼</span></a>
+            <div class="mega-menu">
+                <div class="mega-column">
+                    <h4>Industry</h4>
+                    <ul>
+                        <li><a href="#"><span>✈️</span> Aerospace & Government</a></li>
+                        <li><a href="#"><span>📟</span> AI Chip Development</a></li>
+                        <li><a href="#"><span>🚗</span> Automotive</a></li>
+                        <li><a href="#"><span>☁️</span> Edge AI</a></li>
+                        <li><a href="#"><span>🖥️</span> HPC & Data Center</a></li>
+                        <li><a href="#"><span>📱</span> Mobile</a></li>
+                    </ul>
+                </div>
+                <div class="mega-column">
+                    <h4>Technology</h4>
+                    <ul>
+                        <li><a href="#"><span>🧠</span> Artificial Intelligence</a></li>
+                        <li><a href="#"><span>🌐</span> Cloud</a></li>
+                        <li><a href="#"><span>🧊</span> Electronics Digital Twins</a></li>
+                        <li><a href="#"><span>⚡</span> Energy-Efficient SoCs</a></li>
+                        <li><a href="#"><span>📦</span> Multi-Die</a></li>
+                        <li><a href="#"><span>👁️</span> Photonics & Optics</a></li>
+                    </ul>
+                </div>
+                <div class="featured-content">
+                    <img src="https://via.placeholder.com/400x250" alt="Featured Content">
+                    <h4>Navigating Software-Defined Vehicle Development</h4>
+                    <p>Discover strategies to boost SDV innovation, reduce costs, and enhance reliability.</p>
+                    <a href="#" style="color: #5d3fd3; font-weight: 600;">Download &rarr;</a>
+                </div>
+            </div>
+        </li>
         <li class="nav-item"><a href="#">Products</a></li>
         <li class="nav-item"><a href="#">Resources</a></li>
     </ul>
@@ -152,4 +184,60 @@ function mytheme_register_hero_cpt() {
     register_post_type('hero_slide', $args);
 }
 add_action('init', 'mytheme_register_hero_cpt');
+
+/**
+ * Add custom "Menu Icon" field to the Menu editor (Appearance > Menus)
+ */
+function mytheme_add_menu_icon_field($item_id, $item, $args, $depth) {
+    ?>
+    <p class="field-custom-icon description-wide" style="margin: 10px 0;">
+        <label for="edit-menu-item-custom-icon-<?php echo $item_id; ?>">
+            <?php _e('Menu Icon (Emoji or Icon Name)', 'mytheme'); ?><br />
+            <input type="text" id="edit-menu-item-custom-icon-<?php echo $item_id; ?>" 
+                   class="widefat code edit-menu-item-custom-icon" 
+                   name="menu-item-custom-icon[<?php echo $item_id; ?>]" 
+                   value="<?php echo esc_attr(get_post_meta($item_id, '_menu_item_custom_icon', true)); ?>" 
+                   placeholder="e.g. 🧠 or ☁️" />
+        </label>
+        <span class="description" style="font-size: 11px; color: #666;">Add an icon/emoji to show next to the menu text.</span>
+    </p>
+    <?php
+}
+add_action('wp_nav_menu_item_custom_fields', 'mytheme_add_menu_icon_field', 10, 4);
+
+/**
+ * Save the "Menu Icon" custom field value
+ */
+function mytheme_update_menu_icon_meta($menu_id, $menu_item_db_id, $args) {
+    if (isset($_POST['menu-item-custom-icon'][$menu_item_db_id])) {
+        update_post_meta($menu_item_db_id, '_menu_item_custom_icon', $_POST['menu-item-custom-icon'][$menu_item_db_id]);
+    } else {
+        delete_post_meta($menu_item_db_id, '_menu_item_custom_icon');
+    }
+}
+add_action('wp_update_nav_menu_item', 'mytheme_update_menu_icon_meta', 10, 3);
+
+/**
+ * Filter the menu item title to prepend the saved icon
+ */
+function mytheme_display_menu_icon($title, $item, $args, $depth) {
+    $icon = get_post_meta($item->ID, '_menu_item_custom_icon', true);
+    $description = $item->description;
+    
+    // Wrap title to allow for icons and descriptions
+    $icon_html = $icon ? '<span class="menu-icon">' . $icon . '</span> ' : '';
+    
+    if ($depth === 2 && !empty($description)) {
+        // This is a sub-subcategory link (e.g. Fusion Compiler)
+        $title = $icon_html . '<div class="menu-label"><span class="menu-title">' . $title . '</span><span class="menu-desc">' . esc_html($description) . '</span></div>';
+    } else if ($depth === 1) {
+        // This is a Column Header (e.g. EDA, System)
+        $title = $icon_html . '<span class="menu-header-text">' . $title . '</span>';
+    } else if ($icon) {
+        $title = $icon_html . '<span class="menu-text">' . $title . '</span>';
+    }
+    
+    return $title;
+}
+add_filter('nav_menu_item_title', 'mytheme_display_menu_icon', 10, 4);
 ?>

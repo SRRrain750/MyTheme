@@ -112,4 +112,67 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Mega Menu Controller (Automatic wide-menu for all sub-items)
+    const initAdvancedMenus = () => {
+        const allNavItems = document.querySelectorAll('.nav-menu > li, .nav-item');
+        
+        allNavItems.forEach(item => {
+            const subMenu = item.querySelector('.sub-menu, .mega-menu');
+            if (subMenu) {
+                // Determine if this should be a Mega Menu
+                // 1. If it already has the .mega class from WordPress Admin
+                // 2. OR If it's a 3-level menu (has grandchildren)
+                const hasGrandchildren = subMenu.querySelector('li .sub-menu, li ul');
+                const isSolutions = item.querySelector('a')?.textContent.trim().toLowerCase().includes('solutions');
+
+                if (item.classList.contains('mega') || hasGrandchildren || isSolutions) {
+                    item.classList.add('mega');
+                    item.style.position = 'static';
+                    subMenu.style.display = 'flex';
+                    subMenu.style.width = 'max-content';
+                    subMenu.style.maxWidth = '90vw';
+                    
+                    // Specialized: Add Featured Section ONLY to Solutions if it's missing
+                    if (isSolutions && !subMenu.querySelector('.featured-content')) {
+                        const featuredHtml = `
+                            <li class="featured-content">
+                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800" alt="Featured">
+                                <h4>Navigating Software-Defined Vehicle Development</h4>
+                                <p>Discover strategies to boost SDV innovation, reduce costs, and enhance reliability.</p>
+                                <a href="#">Download &rarr;</a>
+                            </li>
+                        `;
+                        subMenu.insertAdjacentHTML('beforeend', featuredHtml);
+                    }
+                }
+
+                // --- Click-to-Open Logic (Global for all dropdowns) ---
+                const link = item.querySelector('a');
+                link.addEventListener('click', function(e) {
+                    if (!item.classList.contains('is-open')) {
+                        e.preventDefault();
+                        // Close other open menus
+                        document.querySelectorAll('.is-open').forEach(openItem => {
+                            if (openItem !== item) openItem.classList.remove('is-open');
+                        });
+                        item.classList.add('is-open');
+                    } else {
+                        // Logic if the link is clicked again? Usually close on second click or navigate.
+                    }
+                });
+            }
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.mega') && !e.target.closest('.is-open')) {
+                document.querySelectorAll('.is-open').forEach(item => {
+                    item.classList.remove('is-open');
+                });
+            }
+        });
+    };
+
+    initAdvancedMenus();
 });

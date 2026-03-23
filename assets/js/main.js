@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (item.classList.contains('mega') || hasGrandchildren || isSolutions) {
                     item.classList.add('mega');
-                    item.style.position = 'static';
+                    // item.style.position = 'static'; // Removed to allow relative CSS positioning
                     subMenu.style.display = 'flex';
                     subMenu.style.width = 'max-content';
                     subMenu.style.maxWidth = '90vw';
